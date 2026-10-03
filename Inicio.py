@@ -9,7 +9,7 @@ from nltk.stem import SnowballStemmer
 # CONFIGURACIÓN
 # ============================================================
 st.set_page_config(
-    page_title="TF-IDF Match",
+    page_title="Comparador TF-IDF",
     page_icon="✦",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -47,7 +47,7 @@ html, body, [class*="css"] {
     color: var(--ink);
 }
 
-/* Ocultar elementos de Streamlit que rompen el look de app */
+/* Ocultar elementos de Streamlit que rompen el diseño */
 #MainMenu {visibility: hidden;}
 footer {visibility: hidden;}
 header[data-testid="stHeader"] {
@@ -494,8 +494,8 @@ st.markdown("""
     <div class="brand">
         <div class="brand-icon">✦</div>
         <div>
-            <div class="brand-name">TF-IDF Match</div>
-            <div class="brand-sub">Question & answer intelligence</div>
+            <div class="brand-name">Comparador TF-IDF</div>
+            <div class="brand-sub">Inteligencia para preguntas y respuestas</div>
         </div>
     </div>
 </div>
@@ -503,13 +503,13 @@ st.markdown("""
 
 st.markdown("""
 <div class="hero">
-    <div class="hero-eyebrow">Text intelligence · English</div>
-    <div class="hero-title">Find the document that best matches your question.</div>
+    <div class="hero-eyebrow">Inteligencia de texto · Inglés</div>
+    <div class="hero-title">Encuentra el documento que mejor coincide con tu pregunta.</div>
     <div class="hero-copy">
-        Compare your question against a collection of documents using TF-IDF,
-        stemming and cosine similarity.
+        Compara tu pregunta con una colección de documentos usando TF-IDF,
+        stemming y similitud coseno.
     </div>
-    <div class="hero-pill">✦ Smart matching &nbsp;·&nbsp; Snowball stemming</div>
+    <div class="hero-pill">✦ Coincidencia inteligente &nbsp;·&nbsp; Stemming Snowball</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -532,8 +532,8 @@ left, right = st.columns([1.35, 0.65], gap="large")
 with left:
     st.markdown("""
     <div class="card">
-        <div class="card-title">Your documents</div>
-        <div class="card-subtitle">One document per line · English only</div>
+        <div class="card-title">Tus documentos</div>
+        <div class="card-subtitle">Un documento por línea · Solo inglés</div>
     """, unsafe_allow_html=True)
 
     text_input = st.text_area(
@@ -548,18 +548,18 @@ with left:
 with right:
     st.markdown("""
     <div class="card">
-        <div class="card-title">How it works</div>
-        <div class="card-subtitle">Three simple steps</div>
-        <div class="uso-tag">01 · Normalize</div>
+        <div class="card-title">¿Cómo funciona?</div>
+        <div class="card-subtitle">Tres pasos sencillos</div>
+        <div class="uso-tag">01 · Normalizar</div>
         <div class="uso-tag">02 · TF-IDF</div>
-        <div class="uso-tag">03 · Similarity</div>
+        <div class="uso-tag">03 · Similitud</div>
     </div>
     """, unsafe_allow_html=True)
 
 st.markdown("""
 <div class="card">
-    <div class="card-title">Your question</div>
-    <div class="card-subtitle">Write the question you want to match against the documents</div>
+    <div class="card-title">Tu pregunta</div>
+    <div class="card-subtitle">Escribe la pregunta que quieres comparar con los documentos</div>
 """, unsafe_allow_html=True)
 
 question = st.text_input(
@@ -568,7 +568,7 @@ question = st.text_input(
     label_visibility="collapsed",
 )
 
-run = st.button("✦  CALCULATE MATCH", use_container_width=True)
+run = st.button("✦  CALCULAR COINCIDENCIA", use_container_width=True)
 
 st.markdown("</div>", unsafe_allow_html=True)
 
@@ -579,7 +579,7 @@ if run:
     documents = [d.strip() for d in text_input.split("\n") if d.strip()]
 
     if len(documents) < 1:
-        st.warning("Add at least one document to continue.")
+        st.warning("Agrega al menos un documento para continuar.")
         st.stop()
 
     vectorizer = TfidfVectorizer(
@@ -591,7 +591,7 @@ if run:
     try:
         X = vectorizer.fit_transform(documents)
     except ValueError:
-        st.error("The documents do not contain enough usable English terms.")
+        st.error("Los documentos no contienen suficientes términos útiles en inglés.")
         st.stop()
 
     df_tfidf = pd.DataFrame(
@@ -617,36 +617,36 @@ if run:
     with c1:
         st.markdown(f"""
         <div class="metric-card">
-            <div class="metric-label">Documents</div>
+            <div class="metric-label">Documentos</div>
             <div class="metric-value">{len(documents)}</div>
-            <div class="metric-note">documents analyzed</div>
+            <div class="metric-note">documentos analizados</div>
         </div>
         """, unsafe_allow_html=True)
 
     with c2:
         st.markdown(f"""
         <div class="metric-card">
-            <div class="metric-label">Vocabulary</div>
+            <div class="metric-label">Vocabulario</div>
             <div class="metric-value">{len(vectorizer.get_feature_names_out())}</div>
-            <div class="metric-note">unique stems</div>
+            <div class="metric-note">stems únicos</div>
         </div>
         """, unsafe_allow_html=True)
 
     with c3:
         st.markdown(f"""
         <div class="metric-card">
-            <div class="metric-label">Best match</div>
+            <div class="metric-label">Mejor coincidencia</div>
             <div class="metric-value">Doc {best_idx + 1}</div>
-            <div class="metric-note">highest similarity</div>
+            <div class="metric-note">mayor similitud</div>
         </div>
         """, unsafe_allow_html=True)
 
     with c4:
         st.markdown(f"""
         <div class="metric-card">
-            <div class="metric-label">Similarity</div>
+            <div class="metric-label">Similitud</div>
             <div class="metric-value">{best_score:.3f}</div>
-            <div class="metric-note">cosine score</div>
+            <div class="metric-note">puntuación coseno</div>
         </div>
         """, unsafe_allow_html=True)
 
@@ -660,9 +660,9 @@ if run:
 
         st.markdown(f"""
         <div class="score-card">
-            <div class="score-label">MATCH SCORE · DOC {best_idx + 1}</div>
+            <div class="score-label">PUNTUACIÓN · DOC {best_idx + 1}</div>
             <div class="score-number">{best_score:.3f}</div>
-            <span class="score-status">● Best semantic match</span>
+            <span class="score-status">● Mejor coincidencia</span>
             <div class="score-bar"><div class="score-fill" style="width:{percentage}%"></div></div>
         </div>
         """, unsafe_allow_html=True)
@@ -670,10 +670,10 @@ if run:
     with result_right:
         st.markdown(f"""
         <div class="answer-card">
-            <div class="answer-badge">BEST ANSWER</div>
+            <div class="answer-badge">MEJOR RESPUESTA</div>
             <div class="answer-text">{best_doc}</div>
             <div style="margin-top:12px;color:#817580;font-size:.78rem;">
-                Document {best_idx + 1} · cosine similarity {best_score:.3f}
+                Document {best_idx + 1} · similitud coseno {best_score:.3f}
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -694,8 +694,8 @@ if run:
     with rank_col:
         st.markdown("""
         <div class="card">
-            <div class="card-title">Similarity ranking</div>
-            <div class="card-subtitle">Documents ordered by cosine similarity</div>
+            <div class="card-title">Ranking de similitud</div>
+            <div class="card-subtitle">Documentos ordenados por similitud coseno</div>
         """, unsafe_allow_html=True)
 
         for rank, row in sim_df.iterrows():
@@ -715,8 +715,8 @@ if run:
     with tfidf_col:
         st.markdown("""
         <div class="card">
-            <div class="card-title">TF-IDF matrix</div>
-            <div class="card-subtitle">Normalized values after stemming</div>
+            <div class="card-title">Matriz TF-IDF</div>
+            <div class="card-subtitle">Valores normalizados después del stemming</div>
         """, unsafe_allow_html=True)
 
         st.dataframe(
@@ -727,7 +727,7 @@ if run:
 
         csv_tfidf = df_tfidf.to_csv(index=True).encode("utf-8")
         st.download_button(
-            "↓  Export TF-IDF CSV",
+            "↓  Exportar CSV de TF-IDF",
             data=csv_tfidf,
             file_name="tfidf_matrix.csv",
             mime="text/csv",
@@ -748,19 +748,19 @@ if run:
 
     st.markdown(f"""
     <div class="card">
-        <div class="card-title">Question analysis</div>
-        <div class="card-subtitle">Stems from the question that appear in the selected document</div>
+        <div class="card-title">Análisis de la pregunta</div>
+        <div class="card-subtitle">Stems de la pregunta que aparecen en el documento seleccionado</div>
     """, unsafe_allow_html=True)
 
     if matched:
         for stem in matched:
             st.markdown(f'<span class="uso-tag">{stem}</span>', unsafe_allow_html=True)
     else:
-        st.info("No question stems were found directly in the selected document.")
+        st.info("No se encontraron stems de la pregunta directamente en el documento seleccionado.")
 
     st.markdown("</div>", unsafe_allow_html=True)
 
-    with st.expander("View processed documents and similarity table"):
+    with st.expander("Ver documentos procesados y tabla de similitud"):
         st.dataframe(
             sim_df.style.format({"Similitud": "{:.3f}"}),
             use_container_width=True
@@ -769,9 +769,9 @@ else:
     st.markdown("""
     <div class="card" style="text-align:center;padding:30px 22px;">
         <div style="font-size:1.7rem;margin-bottom:8px;">✦</div>
-        <div class="card-title">Ready when you are</div>
+        <div class="card-title">Todo listo</div>
         <div class="card-subtitle" style="margin-bottom:0;">
-            Add your documents, type a question and calculate the best match.
+            Agrega tus documentos, escribe una pregunta y calcula la mejor coincidencia.
         </div>
     </div>
     """, unsafe_allow_html=True)
